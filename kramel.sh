@@ -23,16 +23,16 @@ export KDIR
 export LINKER="ld.lld"
 
 # Device name.
-export DEVICE="POCO X3 Pro"
+export DEVICE="Samsung Galaxy S9"
 
 # Device codename.
-export CODENAME="vayu/bhima"
+export CODENAME="starlte"
 
 # Builder name.
 export BUILDER="ouroboros420"
 
 # Kernel repository URL.
-export REPO_URL="https://github.com/cyberknight777/nethunter_kernel_xiaomi_vayu"
+export REPO_URL="https://github.com/ouroboros420/android_kernel_samsung_exynos9810"
 
 # Commit hash of HEAD.
 COMMIT_HASH=$(git rev-parse --short HEAD)
@@ -128,8 +128,8 @@ elif [[ "${COMPILER}" = clang ]]; then
     )
 fi
 
-if [ ! -d "${KDIR}/anykernel3-vayu/" ]; then
-    git clone --depth=1 https://github.com/cyberknight777/anykernel3 -b vayu anykernel3-vayu
+if [ ! -d "${KDIR}/anykernel3-starlte/" ]; then
+    git clone --depth=1 https://github.com/ouroboros420/AnyKernel3.git -b starlte anykernel3-starlte
 fi
 
 if [ "${ci}" != 1 ]; then
@@ -153,7 +153,7 @@ else
     export KBUILD_BUILD_USER=$BUILDER
     export VERSION=$version
     kver=$KBUILD_BUILD_VERSION
-    zipn=kernel-nethunter-vayu-${VERSION}
+    zipn=kernel-nethunter-starlte-${VERSION}
     if [[ "${MODULE}" = "1" ]]; then
        modn="${zipn}-modules"
     fi
@@ -277,8 +277,8 @@ mkzip() {
         tg "*Building zip!*"
     fi
     echo -e "\n\e[1;93m[*] Building zip! \e[0m"
-    mv "${KDIR}"/out/arch/arm64/boot/Image.gz-dtb "${KDIR}"/anykernel3-vayu
-    cd "${KDIR}"/anykernel3-vayu || exit 1
+    mv "${KDIR}"/out/arch/arm64/boot/Image.gz-dtb "${KDIR}"/anykernel3-starlte
+    cd "${KDIR}"/anykernel3-starlte || exit 1
     zip -r9 "$zipn".zip . -x ".git*" -x "README.md" -x "LICENSE" -x "*.zip"
     echo -e "\n\e[1;32m[✓] Built zip! \e[0m"
     if [[ "${TGI}" != "0" ]]; then
