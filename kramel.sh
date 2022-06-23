@@ -103,15 +103,15 @@ if [[ "${COMPILER}" = gcc ]]; then
     )
 
 elif [[ "${COMPILER}" = clang ]]; then
-    if [ ! -d "${KDIR}/neutron-clang" ]; then
-        wget https://gitlab.com/dakkshesh07/neutron-clang/-/archive/Neutron-15/neutron-clang-Neutron-15.zip
-        unzip "${KDIR}"/neutron-clang-Neutron-15.zip
-        mv "${KDIR}"/neutron-clang-Neutron-15 "${KDIR}"/neutron-clang
+    if [ ! -d "${KDIR}/proton-clang" ]; then
+        wget https://github.com/kdrag0n/proton-clang/archive/refs/heads/master.zip
+        unzip "${KDIR}"/master.zip
+        mv "${KDIR}"/proton-clang-master "${KDIR}"/proton-clang
     fi
 
-    KBUILD_COMPILER_STRING=$("${KDIR}"/neutron-clang/bin/clang -v 2>&1 | head -n 1 | sed 's/(https..*//' | sed 's/ version//')
+    KBUILD_COMPILER_STRING=$("${KDIR}"/proton-clang/bin/clang -v 2>&1 | head -n 1 | sed 's/(https..*//' | sed 's/ version//')
     export KBUILD_COMPILER_STRING
-    export PATH=$KDIR/neutron-clang/bin/:/usr/bin/:${PATH}
+    export PATH=$KDIR/proton-clang/bin/:/usr/bin/:${PATH}
     MAKE+=(
         ARCH=arm64
         O=out
@@ -124,7 +124,6 @@ elif [[ "${COMPILER}" = clang ]]; then
         OBJDUMP=llvm-objdump
         STRIP=llvm-strip
         CC=clang
-        LLVM=1
     )
 fi
 
@@ -228,7 +227,7 @@ img() {
     rgn
     echo -e "\n\e[1;93m[*] Building Kernel! \e[0m"
     BUILD_START=$(date +"%s")
-    time make -j"$PROCS" "${MAKE[@]}" Image.gz-dtb dtbo.img 2>&1 | tee log.txt
+    time make -j"$PROCS" "${MAKE[@]}" Image.gz 2>&1 | tee log.txt
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
     if [ -f "${KDIR}/out/arch/arm64/boot/Image" ]; then
